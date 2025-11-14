@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do You Love Me?</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e, #fecfef 60%, #fcb1d4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+/* Heart animation */
+.heart {
+    width: 180px;
+    height: 180px;
+    background: #ff1e56;
+    position: relative;
+    transform: rotate(-45deg);
+    animation: beat 1s infinite ease-in-out;
+    filter: drop-shadow(0px 0px 25px #ff1e56);
+    z-index: 2;
+    border-radius: 20px;
+}
+.heart:before, .heart:after {
+    content: "";
+    width: 180px;
+    height: 180px;
+    background: #ff1e56;
+    border-radius: 50%;
+    position: absolute;
+}
+.heart:before { top: -90px; left: 0; }
+.heart:after { left: 90px; top: 0; }
+@keyframes beat {
+    0%, 100% { transform: scale(1) rotate(-45deg); }
+    50% { transform: scale(1.25) rotate(-45deg); }
+}
+
+/* Floating hearts */
+.floating-heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #ff3366;
+    transform: rotate(-45deg);
+    animation: floatHeart linear infinite;
+    border-radius: 20px;
+}
+@keyframes floatHeart {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-600px) rotate(360deg); opacity: 0; }
+}
+
+/* Question text */
+.question { font-size: 32px; margin-top: 20px; font-weight: bold; color: #721c24; text-shadow:0px 0px 10px #fff; z-index:2; }
+
+/* Buttons */
+.btns { margin-top: 20px; z-index:2; }
+button {
+    padding: 12px 28px;
+    margin: 10px;
+    border: none;
+    border-radius: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    background: #ff4d6d;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+button:hover { transform: scale(1.1); background:#d6336c; }
+
+/* Message with typewriter effect */
+.message {
+    margin-top: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #5a0a1e;
+    min-height: 40px;
+    opacity: 1;
+}
+.typewriter span {
+    border-right: 2px solid #5a0a1e;
+    display:inline-block;
+    white-space: nowrap;
+    overflow:hidden;
+}
+
+/* Heart explosion */
+.heart-explode {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #ff3366;
+    transform: rotate(-45deg);
+    animation: explode 0.8s forwards;
+    z-index:3;
+    border-radius: 20px;
+}
+@keyframes explode {
+    0% { transform: scale(0) translate(0,0); opacity:1; }
+    100% { transform: scale(1.5) translate(var(--x), var(--y)); opacity:0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Heart -->
+<div class="heart" id="heart"></div>
+
+<div class="question">Do you love me? ❤️</div>
+
+<div class="btns">
+    <button onclick="yesAnswer()">YES</button>
+    <button onclick="noAnswer()">NO</button>
+</div>
+
+<div class="message" id="msg"></div>
+
+<!-- Heart explosion container -->
+<div id="explosionContainer"></div>
+
+<script>
+// Typewriter effect
+function typeWriter(text, element) {
+    element.innerHTML = '';
+    const span = document.createElement('span');
+    element.appendChild(span);
+    let i = 0;
+    function type() {
+        if (i < text.length) {
+            span.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, 50);
+        }
+    }
+    type();
+}
+
+// Heart explosion
+function explodeHeart() {
+    const container = document.getElementById('explosionContainer');
+    for(let i=0;i<15;i++){
+        const h = document.createElement('div');
+        h.className='heart-explode';
+        let angle = Math.random()*360;
+        let distance = Math.random()*100 + 50;
+        h.style.setProperty('--x', `${distance*Math.cos(angle*Math.PI/180)}px`);
+        h.style.setProperty('--y', `${distance*Math.sin(angle*Math.PI/180)}px`);
+        h.style.left = '50%';
+        h.style.top = '50%';
+        container.appendChild(h);
+        setTimeout(()=>{ h.remove(); },800);
+    }
+}
+
+// Generate floating hearts
+function createFloatingHearts() {
+    for(let i=0;i<20;i++){
+        const h = document.createElement('div');
+        h.className='floating-heart';
+        h.style.left=Math.random()*100+"%";
+        h.style.animationDuration=(3+Math.random()*5)+"s";
+        document.body.appendChild(h);
+    }
+}
+createFloatingHearts();
+
+function yesAnswer() {
+    const msg = document.getElementById("msg");
+    explodeHeart();
+    typeWriter("I love you so much Raghoudti ❤️", msg);
+}
+
+function noAnswer() {
+    const msg = document.getElementById("msg");
+    typeWriter("You will love me with time 💗", msg);
+}
+</script>
+
+</body>
+</html>
